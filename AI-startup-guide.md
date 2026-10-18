@@ -37,6 +37,11 @@ Before starting code generation for a new app:
 4. **Configure Vercel Deployment Region:**
    * Pin function region in `vercel.json` (`"regions": ["dub1"]`) to match Supabase's region (`eu-west-1`).
    * Confirm in Vercel Dashboard (*Project Settings -> Functions -> Function Region*). Note that region updates require a new deployment to take effect.
+   * **Set Deployment Retention Policy** (Vercel keeps every deployment forever by default, which fills Hobby deployment storage). Set it via the Vercel MCP if available; otherwise tell the user to set it in *Project Settings -> Security -> Deployment Retention Policy*:
+     * Canceled: 1 day
+     * Errored: 1 day
+     * Pre-Production: 1 week
+     * Production: 30 days
 5. **Update Project README.md:**
    * Fill in [README.md](file:///c:/Users/shiri/Code/Common/Vibe%20Template/README.md) with the new project's actual name, description, and overview.
 6. **Configure Database Environment Details:**
@@ -80,7 +85,9 @@ If Stack Profile is Python:
 
 Proceed to generate initial schema DDL, API route dispatcher / backend setups, and component shells adhering strictly to these docs.
 
-Once startup is finished on your side, explain clearly to the user what manual steps they still need to complete (e.g. creating the Vercel project, setting up environment variables in Vercel, configuring third-party tokens). Only after explaining these steps should you remove `AI-startup-guide.md`.
+Once the Vercel project exists, set its Deployment Retention Policy via the Vercel MCP (canceled 1 day, errored 1 day, pre-production 1 week, production 30 days). If the MCP is unavailable, list it as a manual step.
+
+Once startup is finished on your side, explain clearly to the user what manual steps they still need to complete (e.g. creating the Vercel project, setting up environment variables in Vercel, setting the Deployment Retention Policy if not done via MCP, configuring third-party tokens). Only after explaining these steps should you remove `AI-startup-guide.md`.
 ```
 
 ---
@@ -88,6 +95,6 @@ Once startup is finished on your side, explain clearly to the user what manual s
 ## 4. Off-Ramp / Post-Launch Cleanup
 
 Once startup and scaffolding are finished on your side:
-1. **Explain to the user what manual steps they still need to perform** (e.g., create the Vercel project, set up environment variables in Vercel, configure production domain settings).
+1. **Explain to the user what manual steps they still need to perform** (e.g., create the Vercel project, set up environment variables in Vercel, set the Deployment Retention Policy if not done via MCP, configure production domain settings).
 2. **Only then remove `AI-startup-guide.md`** from the root directory to keep the repository clean.
 3. **Retain core documentation:** Keep `AGENTS.md`, `docs/ARCHITECTURE.md`, and `docs/CODING-STANDARDS.md` as living documentation.
