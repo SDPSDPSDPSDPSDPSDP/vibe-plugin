@@ -27,26 +27,28 @@ Only branches that once tracked a remote qualify. Never touch local-only branche
 - `main` / `master` / default branch.
 - Branches checked out in another worktree (`git worktree list`).
 
-4. For each candidate, show last commit and whether it is merged into main:
+4. For each candidate, show last commit and its merged PR:
 
 ```
 git log -1 --format="%h %cr %s" <branch>
-git branch --merged main --list <branch>
+gh pr list --state merged --head <branch> --json number --jq '.[0].number'
 ```
 
-Squash/rebase merges show as unmerged - flag them, do not drop them.
+Do not use `git branch --merged main`: squash merges never put the branch's commits in main's history, so it reports every squash-merged branch as unmerged. If `gh` is unavailable, say so and label every candidate `unknown`.
 
 5. Nothing found -> say so and stop.
 
 6. List candidates to the user, one line each:
 
 ```
-<branch> - <hash> <age> <subject> - merged | not merged (likely squash)
+<branch> - <hash> <age> <subject> - merged (#<pr>) | no merged PR
 ```
+
+Flag `no merged PR` branches separately: their remote was deleted without a merge, so they may hold unmerged work.
 
 Ask user to confirm before deleting. Offer: delete all, pick some, cancel. Do not delete anything without explicit yes.
 
-7. Delete confirmed branches. Use `git branch -d`; if it refuses (squash-merged), use `git branch -D` for that branch only, since the user confirmed it.
+7. Delete confirmed branches with `git branch -D` (`-d` refuses squash-merged branches). Record each hash first for the report.
 
 ## Report
 
