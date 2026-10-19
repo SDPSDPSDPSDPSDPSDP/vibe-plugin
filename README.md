@@ -22,3 +22,4 @@ Projects from the template enable it through `.claude/settings.json`. Elsewhere:
 | `/architecture-review`, `/db-audit` | Read-only reviews |
 | `/prune-branches` | Delete local branches whose remote is gone |
 | Stop hook | `tsc --noEmit` (TypeScript) / `ruff` + `mypy` (Python) on changed projects |
+| UserPromptSubmit hook | Re-injects the caveman response style on every prompt |
