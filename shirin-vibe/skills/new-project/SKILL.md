@@ -31,8 +31,9 @@ only what applies. Unsupported combination (section 2): say so and stop.
 
 ## 3. Prune
 
-Run `template/prune.sh` with the chosen modules, per the usage at the top of
-`template/MODULES.md`. Error: relay the message and stop.
+Run `template/prune.sh` with the service name and the chosen modules, per the usage at
+the top of `template/MODULES.md`. It also renames `my-service`. Error: relay the
+message and stop.
 
 ## 4. Fill in
 

@@ -1,5 +1,10 @@
 {
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/caveman.js\"" }]
+      }
+    ],
     "Stop": [
       {
         "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/typecheck.js\"" }]
