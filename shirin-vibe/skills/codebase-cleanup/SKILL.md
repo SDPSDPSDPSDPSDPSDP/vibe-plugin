@@ -1,6 +1,6 @@
 ---
 name: codebase-cleanup
-description: Clean up the entire codebase - enforce project rules, simplify, readability, strip stale comments, dedupe, audit file size, deslop (audit-first AI slop tells) across all tracked source files, then run architecture review and DB audit, then prune gone local branches. Scope defaults to the whole codebase, or a folder/path the user names. Use when the user says "clean the codebase", "codebase cleanup", "clean everything", "run codebase cleanup on <folder>", or /codebase-cleanup.
+description: Clean up the entire codebase - enforce project rules, simplify, readability, strip stale comments, dedupe, audit file size across all tracked source files, then run deslop audit, architecture review and DB audit, then prune gone local branches. Scope defaults to the whole codebase, or a folder/path the user names. Use when the user says "clean the codebase", "codebase cleanup", "clean everything", "run codebase cleanup on <folder>", or /codebase-cleanup.
 ---
 
 # Codebase Cleanup
@@ -29,12 +29,12 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 4. `clean-comments` - run on Sonnet (subagent with `model: sonnet`)
 5. `detect-duplication` - look for duplication across all files in scope, not just within one file
 6. `review-file-size`
-7. `deslop` - audit first, report, then fix. Collect its manual browser checklist for the final report.
+7. `deslop` - report only, no fixes.
 8. `architecture-review` - report only, no fixes. Runs on the cleaned-up code.
 9. `db-audit` - report only, no fixes.
 10. `prune-branches` - repo-wide, ignores file scope. Runs last because it waits for user confirmation before deleting.
 
-Steps 8-9 cover the whole codebase by default. If the user named a scope, tell them to limit the review to those paths. Same sequential rule applies: one subagent at a time.
+Steps 7-9 cover the whole codebase by default. If the user named a scope, tell them to limit the review to those paths. Same sequential rule applies: one subagent at a time.
 
 ## After changes
 

@@ -1,11 +1,11 @@
 ---
 name: deslop
-description: Audit the app for every "vibe coded" / AI slop tell (default domains, missing metadata, generic 404/loading/empty/error states, broken SEO, console noise, responsive gaps, design drift, dead buttons), report all findings first, then fix them. Use when the user says "deslop", "remove the AI slop", "make it not look vibe coded", "polish audit", or /deslop. Also run by codebase-cleanup.
+description: Audit the app for every "vibe coded" / AI slop tell (default domains, missing metadata, generic 404/loading/empty/error states, broken SEO, console noise, responsive gaps, design drift, dead buttons), report only, no fixes. Use when the user says "deslop", "remove the AI slop", "make it not look vibe coded", "polish audit", or /deslop. Also run by codebase-cleanup.
 ---
 
 # Deslop
 
-Find every detail that makes someone think "AI slop" within five seconds, then fix it. Audit first: complete the full audit and report it before editing anything.
+Find every detail that makes someone think "AI slop" within five seconds. Report only, no fixes. The user decides what to fix after reading the report.
 
 ## Scope
 
@@ -13,7 +13,7 @@ If given a file list (e.g. by codebase-cleanup), use it. Otherwise use the whole
 
 Browser-only checks (real screen sizes, console output at runtime, clicking through flows, social preview rendering) cannot be automated here. List them as manual checks for the user at the end.
 
-## Phase 1 - Audit
+## Checks
 
 Check every item. Do not stop at the first hit per category. Read the code; do not assume a framework default covers it.
 
@@ -69,35 +69,17 @@ Check every item. Do not stop at the first hit per category. Read the code; do n
 - Focus states visible on every interactive element. Keyboard navigation works for menus, modals and dropdowns. Escape closes modals.
 - External links open correctly and use `rel="noopener noreferrer"` with `target="_blank"`.
 
-## Report the audit
+## Report
 
-Report every finding before fixing. Group by category, ranked by how fast a visitor would notice it.
+Report only. Do not edit any file. The user picks what to fix.
+
+Terse. Group by category, ranked by how fast a visitor would notice it. Number every finding so the user can pick by number. No prose, no praise.
 
 ```
 ## <category>
-file:line - problem. fix.
+1. file:line - problem. fix.
 ```
+
+Mark findings that need information you do not have (production domain, brand copy, OG image artwork, real content) with `needs: <what>`. Never suggest inventing a domain or fake content.
 
 Then list manual browser checks the user must do.
-
-## Phase 2 - Fix
-
-Fix every finding from the audit. Follow the project's own rules (tokens, component folders, no fallbacks). Reuse existing components and tokens before adding new ones.
-
-Skip and report a finding when the fix needs information you do not have: production domain, brand copy, OG image artwork, real content. Never invent a domain or fake content to fill a gap.
-
-## After changes
-
-1. Run typecheck/lint for the project (see project's own docs/AGENTS.md for exact commands).
-2. Ask the user to check the manual browser items.
-
-## Report
-
-Terse. One line per item, grouped by file. No prose, no praise.
-
-```
-file:line - fixed: what. why.
-file:line - skipped: what. needs: what info.
-```
-
-Then the manual browser checklist.
