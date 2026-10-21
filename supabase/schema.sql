@@ -1,1 +1,0 @@
--- Reflects the live schema of the projects schema, including the RLS
