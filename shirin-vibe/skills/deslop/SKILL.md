@@ -47,6 +47,12 @@ Check every item. Do not stop at the first hit per category. Read the code; do n
 - Exposed dev files: `.env*` committed, source maps public in production, `/api/test`, debug routes, seed/admin pages without auth, `todo.md` or notes served from `public/`.
 - Unused dependencies and dead files. Large deps imported for small use (whole icon packs, moment, lodash). Client components that could be server components. Heavy imports not code-split.
 - Run the project build analyzer only if no dev server is running (see project rules); otherwise report bundle risks from imports.
+- Leftover scaffold: `package.json` name still `my-app` or the template name, default create-next-app README, template SVGs (`vercel.svg`, `next.svg`, `file.svg`, `globe.svg`, `window.svg`) still in `public/`.
+
+### Dark mode
+- Theme flash on load: wrong theme paints before JS runs. Theme must be set before first paint (inline script or `color-scheme`), not in a `useEffect`.
+- Components that ignore the theme: hardcoded colors, images/logos/SVGs with no dark variant, third-party embeds stuck in light mode.
+- Contrast failing in one mode only: text, borders, focus rings and disabled states checked in both light and dark.
 
 ### Responsiveness
 - Layouts at 320px, 375px, 768px, 1024px, 1440px and very wide (2560px). Fixed widths/heights that overflow. Horizontal scroll on mobile.
