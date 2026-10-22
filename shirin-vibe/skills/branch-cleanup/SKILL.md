@@ -31,8 +31,9 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 
 ## After changes
 
-1. Run typecheck/lint for the project (see project's own docs/AGENTS.md for exact commands).
-2. Report what changed and what was skipped.
+1. Bump semver for this branch's changes. Find version file(s) (`package.json`, `pyproject.toml`, `.claude-plugin/plugin.json`, etc.). Pick bump from full branch diff vs main: major - breaking change (removed/renamed public API, CLI flag, config key, skill); minor - new feature, backward compatible; patch - fix, refactor, docs, cleanup only. Compare to main's version (`git show main:<file>`) - bump once per branch, not per run. If branch already bumped enough, leave it; if bumped too little, raise it. Keep all version files and lockfiles in sync. Skip if project has no version.
+2. Run typecheck/lint for the project (see project's own docs/AGENTS.md for exact commands).
+3. Report what changed and what was skipped, including version bump (`old -> new`, why).
 
 ## Report
 
