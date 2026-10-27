@@ -21,7 +21,9 @@ Drop non-source files: lockfiles, generated code, build output, vendored deps, b
 
 Run each skill in order, passing it the in-scope file list. Apply only justified changes - skip a check if nothing in scope qualifies.
 
-**Strictly sequential. Never run checks in parallel.** One check at a time. Wait for it to finish fully before starting the next - each check edits files the next one reads. If your tool supports subagents, delegate each skill to one, but spawn only one subagent at a time and wait for its result (never background it, never launch two in the same turn).
+**Steps 1-6 strictly sequential. Never run them in parallel.** One check at a time. Wait for it to finish fully before starting the next - each check edits files the next one reads. If your tool supports subagents, delegate each skill to one, but spawn only one subagent at a time and wait for its result (never background it, never launch two in the same turn).
+
+**Steps 7-9 run in parallel** once steps 1-6 are all done. They are read-only audits, so they cannot conflict. Launch all three subagents in the same turn and wait for all of them before step 10.
 
 1. `project-rules`
 2. `simplify-code`
@@ -34,7 +36,7 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 9. `db-audit` - report only, no fixes.
 10. `prune-branches` - repo-wide, ignores file scope. Runs last because it waits for user confirmation before deleting.
 
-Steps 7-9 cover the whole codebase by default. If the user named a scope, tell them to limit the review to those paths. Same sequential rule applies: one subagent at a time.
+Steps 7-9 cover the whole codebase by default. If the user named a scope, tell them to limit the review to those paths.
 
 ## After changes
 
