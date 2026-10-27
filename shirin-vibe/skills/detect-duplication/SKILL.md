@@ -18,8 +18,10 @@ git diff main...HEAD --name-only
 Detect clones with a tool, not by reading:
 
 ```
-npx --yes jscpd@4 --min-lines 5 --gitignore <files in scope>
+npx --yes jscpd@4 --min-lines 5 --reporters console <files in scope>
 ```
+
+Never add `--gitignore` or pass a whole directory: jscpd then walks `node_modules` and hangs on Windows. If jscpd runs over ~2 min, kill it (and its child `node` processes) and fall back to grep + reading.
 
 Treat the jscpd output as candidates. Then look for duplicated logic jscpd can't see (same behavior, different wording) in files in scope. Consolidate only when it makes the code simpler. Don't create generic abstractions for two superficially similar snippets - two similar-looking blocks are not automatically duplication.
 
