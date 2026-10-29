@@ -25,7 +25,9 @@ npx eslint --format compact <files in scope>
 
 No ESLint in project -> use `wc -l`, same 200 LOC limit.
 
-For each flagged file: split it. The number decides WHETHER to split; responsibilities decide WHERE. Cut along real boundaries (separate concerns, sub-components, helpers, types) - never mid-function or into arbitrary part1/part2 files.
+No file over 200 LOC -> second pass at 100 LOC. These splits are optional: think critically per file. Split only where a real responsibility boundary exists and the parts read better alone. Cohesive file (one component, one module doing one job) stays as is, even at 180 LOC. Never split just to hit the number.
+
+For each file over 200 LOC: split it. The number decides WHETHER to split; responsibilities decide WHERE. Cut along real boundaries (separate concerns, sub-components, helpers, types) - never mid-function or into arbitrary part1/part2 files.
 
 Only exceptions: generated code, data/constant tables, test fixtures. Report them as kept.
 
@@ -38,4 +40,5 @@ Terse. One line per file. No prose.
 ```
 file - split into: new files. why.
 file - kept at N LOC. exception: generated/data/fixture.
+file - kept at N LOC (100 LOC pass). why: cohesive, no clean boundary.
 ```
