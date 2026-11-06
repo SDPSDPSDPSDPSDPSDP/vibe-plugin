@@ -21,9 +21,11 @@ Drop non-source files: lockfiles, generated code, build output, vendored deps, b
 
 Run each skill in order, passing it the in-scope file list. Apply only justified changes - skip a check if nothing in scope qualifies.
 
-**Steps 1-6 strictly sequential. Never run them in parallel.** One check at a time. Wait for it to finish fully before starting the next - each check edits files the next one reads. If your tool supports subagents, delegate each skill to one with `model: sonnet` (except `architecture-review`: `model: opus`), but spawn only one subagent at a time and wait for its result (never background it, never launch two in the same turn).
+**Steps 1-6 strictly sequential. Never run them in parallel.** One check at a time. Wait for it to finish fully before starting the next - each check edits files the next one reads. If your tool supports subagents, delegate each skill to one, but spawn only one subagent at a time and wait for its result (never background it, never launch two in the same turn).
 
 **Steps 7-9 run in parallel** once steps 1-6 are all done. They are read-only audits, so they cannot conflict. Launch all three subagents in the same turn and wait for all of them before step 10.
+
+**Models:** every check subagent (steps 1-9) uses `model: sonnet`, except `architecture-review`, which uses `model: opus` - it reasons across the whole codebase and runs rarely.
 
 1. `project-rules`
 2. `simplify-code`
