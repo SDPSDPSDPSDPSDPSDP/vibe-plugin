@@ -1,6 +1,7 @@
 ---
 name: auditor
 description: Read-only code and database auditor. Runs the architecture-review and db-audit skills. Cannot edit files or write to the database.
+model: sonnet
 tools:
   - Read
   - Grep
