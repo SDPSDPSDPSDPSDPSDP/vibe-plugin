@@ -25,10 +25,12 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 
 **Steps 7-9 run in parallel** once steps 1-6 are all done. They are read-only audits, so they cannot conflict. Launch all three subagents in the same turn and wait for all of them before step 10.
 
+**Models:** every check subagent (steps 1-9) uses `model: sonnet`, except `architecture-review`, which uses `model: opus` - it reasons across the whole codebase and runs rarely.
+
 1. `project-rules`
 2. `simplify-code`
 3. `readability`
-4. `clean-comments` - run on Sonnet (subagent with `model: sonnet`)
+4. `clean-comments`
 5. `detect-duplication` - look for duplication across all files in scope, not just within one file
 6. `review-file-size`
 7. `deslop` - report only, no fixes.
