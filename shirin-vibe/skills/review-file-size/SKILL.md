@@ -1,6 +1,6 @@
 ---
 name: review-file-size
-description: Split the current branch's changed files over 200 LOC (target 100-200) along real responsibility boundaries. Use when the user says "review file size" or /review-file-size. Also run by branch-cleanup.
+description: Split the current branch's changed files over 200 LOC, then review files over 100 LOC (ideal around 100) along real responsibility boundaries. Use when the user says "review file size" or /review-file-size. Also run by branch-cleanup.
 ---
 
 # Review File Size
@@ -15,19 +15,23 @@ git diff main...HEAD --name-only
 
 ## Steps
 
-Target: code files of 100-200 LOC. Over 200 LOC is always too much - that file must be split, no exceptions for "it's still readable".
+Ideal: code files around 100 LOC. 200 LOC is the hard ceiling, not the target. Two passes, always both.
 
-Get oversized and over-nested files from ESLint (`max-lines`, `max-depth`, `complexity` rules in the project config), not by counting:
+Get file sizes from ESLint (`max-lines`, `max-depth`, `complexity` rules in the project config), not by counting:
 
 ```
 npx eslint --format compact <files in scope>
 ```
 
-No ESLint in project -> use `wc -l`, same 200 LOC limit.
+No ESLint in project -> use `wc -l`.
 
-No file over 200 LOC -> second pass at 100 LOC. These splits are optional: think critically per file. Split only where a real responsibility boundary exists and the parts read better alone. Cohesive file (one component, one module doing one job) stays as is, even at 180 LOC. Never split just to hit the number.
+### Pass 1: large offenders (over 200 LOC)
 
-For each file over 200 LOC: split it. The number decides WHETHER to split; responsibilities decide WHERE. Cut along real boundaries (separate concerns, sub-components, helpers, types) - never mid-function or into arbitrary part1/part2 files.
+Every file over 200 LOC must be split, no exceptions for "it's still readable". The number decides WHETHER to split; responsibilities decide WHERE. Cut along real boundaries (separate concerns, sub-components, helpers, types) - never mid-function or into arbitrary part1/part2 files. Aim the resulting files at around 100 LOC, not just under 200.
+
+### Pass 2: toward 100 LOC
+
+Always run, after pass 1. Check every file in scope over 100 LOC, including files created in pass 1. Here splits are a judgment call: split where a real responsibility boundary exists and the parts read better alone. Cohesive file (one component, one module doing one job) stays as is, even at 180 LOC. Never split just to hit the number, but do not stop at "under 200" either.
 
 Only exceptions: generated code, data/constant tables, test fixtures. Report them as kept.
 
