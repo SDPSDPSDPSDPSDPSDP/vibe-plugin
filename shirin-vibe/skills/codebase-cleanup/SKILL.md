@@ -1,6 +1,6 @@
 ---
 name: codebase-cleanup
-description: Clean up the entire codebase - sync rules from the template, enforce project rules, simplify, readability, strip stale comments, dedupe, audit file size across all tracked source files, then run deslop, architecture review and DB audit (each fixes what it can), then prune gone local branches. Scope defaults to the whole codebase, or a folder/path the user names. Use when the user says "clean the codebase", "codebase cleanup", "clean everything", "run codebase cleanup on <folder>", or /codebase-cleanup.
+description: Clean up the entire codebase - sync rules from the template, enforce project rules, simplify, readability, strip stale comments, dedupe, audit file size across all tracked source files, then run deslop, architecture review, DB, security and performance audits (each fixes what it can), then prune gone local branches. Scope defaults to the whole codebase, or a folder/path the user names. Use when the user says "clean the codebase", "codebase cleanup", "clean everything", "run codebase cleanup on <folder>", or /codebase-cleanup.
 ---
 
 # Codebase Cleanup
@@ -25,7 +25,7 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 
 Each check fixes what it is confident about and returns a numbered "needs your go-ahead" list instead of stopping to ask. Collect those lists. Do not ask the user anything until the final report (except `prune-branches`).
 
-**Models:** every check subagent (steps 1-10) uses `model: sonnet`, except `architecture-review`, which uses `model: opus` - it reasons across the whole codebase and runs rarely.
+**Models:** every check subagent (steps 1-12) uses `model: sonnet`, except `architecture-review` and the security audit, which use `model: opus` - they reason across the whole codebase and run rarely.
 
 1. `sync-template-rules` - repo-wide, ignores file scope. Runs first so later checks enforce the latest rules.
 2. `project-rules`
@@ -37,9 +37,11 @@ Each check fixes what it is confident about and returns a numbered "needs your g
 8. `deslop`
 9. `architecture-review` - runs on the cleaned-up code.
 10. `db-audit`
-11. `prune-branches` - repo-wide, ignores file scope. Runs last because it waits for user confirmation before deleting.
+11. Security audit - no skill. Subagent prompt: "Do a complete security audit of this codebase like an expert. Follow the Fix or ask rules in the `db-audit` skill."
+12. Performance audit - no skill. Subagent prompt: "Do a complete performance audit of this codebase like an expert. Follow the Fix or ask rules in the `db-audit` skill."
+13. `prune-branches` - repo-wide, ignores file scope. Runs last because it waits for user confirmation before deleting.
 
-Steps 8-10 cover the whole codebase by default. If the user named a scope, tell them to limit the work to those paths.
+Steps 8-12 cover the whole codebase by default. If the user named a scope, tell them to limit the work to those paths.
 
 ## After changes
 

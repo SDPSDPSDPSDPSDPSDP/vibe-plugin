@@ -21,5 +21,6 @@ Projects from the template enable it through `.claude/settings.json`. Elsewhere:
 | `/branch-cleanup`, `/codebase-cleanup` | Project rules, simplify, readability, comments, dedupe, file size |
 | `/sync-template-rules` | Pull newer rules and docs from the template into a project |
 | `/deslop`, `/architecture-review`, `/db-audit` | Audits: fix what is safe, list what needs your go-ahead |
+| `/agent-ready` | Improve codebase for agentic coding: AGENTS.md, check commands, structure, guardrails |
 | `/prune-branches` | Delete local branches whose remote is gone |
 | Stop hook | `tsc --noEmit` (TypeScript) / `ruff` + `mypy` (Python) on changed projects |
