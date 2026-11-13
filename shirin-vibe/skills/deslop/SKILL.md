@@ -1,15 +1,26 @@
 ---
 name: deslop
-description: Audit the app for every "vibe coded" / AI slop tell (default domains, missing metadata, generic 404/loading/empty/error states, broken SEO, console noise, responsive gaps, design drift, dead buttons), report only, no fixes. Use when the user says "deslop", "remove the AI slop", "make it not look vibe coded", "polish audit", or /deslop. Also run by codebase-cleanup.
+description: Audit the app for every "vibe coded" / AI slop tell (default domains, missing metadata, generic 404/loading/empty/error states, broken SEO, console noise, responsive gaps, design drift, dead buttons), fixes what it can and lists what needs the user's go-ahead. Use when the user says "deslop", "remove the AI slop", "make it not look vibe coded", "polish audit", or /deslop. Also run by codebase-cleanup.
 ---
 
 # Deslop
 
-Find every detail that makes someone think "AI slop" within five seconds. Report only, no fixes. The user decides what to fix after reading the report.
+Find every detail that makes someone think "AI slop" within five seconds. Fix what you can. List the rest for the user.
 
 ## Scope
 
 If given a file list (e.g. by codebase-cleanup), use it. Otherwise use the whole app: `git ls-files`. If the user gives a live URL, check it too (fetch pages, headers, `robots.txt`, `sitemap.xml`, OG tags).
+
+
+## Fix or ask
+
+Fix every finding you are confident about. Do not ask first. Leave a finding for the user only when it needs:
+- information you do not have (production domain, brand copy, artwork, real content, business rules)
+- a write to a live database, a migration on shared data, or anything else hard to undo
+- a product or design decision with no clear right answer (removing a feature, changing user-visible behavior)
+- a new dependency, a public API/route change, or a refactor so large it should be its own PR
+
+Never invent a domain, copy or content to close a finding.
 
 Browser-only checks (real screen sizes, console output at runtime, clicking through flows, social preview rendering) cannot be automated here. List them as manual checks for the user at the end.
 
@@ -77,15 +88,16 @@ Check every item. Do not stop at the first hit per category. Read the code; do n
 
 ## Report
 
-Report only. Do not edit any file. The user picks what to fix.
-
-Terse. Group by category, ranked by how fast a visitor would notice it. Number every finding so the user can pick by number. No prose, no praise.
+Terse. No prose, no praise.
 
 ```
-## <category>
-1. file:line - problem. fix.
+## Fixed
+file:line - what. why.
+
+## Needs your go-ahead
+1. file:line - problem. why not fixed. what you need from the user.
 ```
 
-Mark findings that need information you do not have (production domain, brand copy, OG image artwork, real content) with `needs: <what>`. Never suggest inventing a domain or fake content.
+Number the go-ahead items so the user can answer by number. Run typecheck/lint after fixes.
 
 Then list manual browser checks the user must do.
