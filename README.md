@@ -20,6 +20,6 @@ Projects from the template enable it through `.claude/settings.json`. Elsewhere:
 | `/new-project` | Scaffold a project from the template: ask, prune, fill in, verify |
 | `/branch-cleanup`, `/codebase-cleanup` | Project rules, simplify, readability, comments, dedupe, file size |
 | `/sync-template-rules` | Pull newer rules and docs from the template into a project |
-| `/architecture-review`, `/db-audit` | Read-only reviews |
+| `/deslop`, `/architecture-review`, `/db-audit` | Audits: fix what is safe, list what needs your go-ahead |
 | `/prune-branches` | Delete local branches whose remote is gone |
 | Stop hook | `tsc --noEmit` (TypeScript) / `ruff` + `mypy` (Python) on changed projects |

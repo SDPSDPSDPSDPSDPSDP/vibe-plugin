@@ -1,6 +1,6 @@
 ---
 name: codebase-cleanup
-description: Clean up the entire codebase - sync rules from the template, enforce project rules, simplify, readability, strip stale comments, dedupe, audit file size across all tracked source files, then run deslop audit, architecture review and DB audit, then prune gone local branches. Scope defaults to the whole codebase, or a folder/path the user names. Use when the user says "clean the codebase", "codebase cleanup", "clean everything", "run codebase cleanup on <folder>", or /codebase-cleanup.
+description: Clean up the entire codebase - sync rules from the template, enforce project rules, simplify, readability, strip stale comments, dedupe, audit file size across all tracked source files, then run deslop, architecture review and DB audit (each fixes what it can), then prune gone local branches. Scope defaults to the whole codebase, or a folder/path the user names. Use when the user says "clean the codebase", "codebase cleanup", "clean everything", "run codebase cleanup on <folder>", or /codebase-cleanup.
 ---
 
 # Codebase Cleanup
@@ -21,9 +21,9 @@ Drop non-source files: lockfiles, generated code, build output, vendored deps, b
 
 Run each skill in order, passing it the in-scope file list. Apply only justified changes - skip a check if nothing in scope qualifies.
 
-**Steps 1-7 strictly sequential. Never run them in parallel.** One check at a time. Wait for it to finish fully before starting the next - each check edits files the next one reads. If your tool supports subagents, delegate each skill to one, but spawn only one subagent at a time and wait for its result (never background it, never launch two in the same turn).
+**All steps strictly sequential. Never run them in parallel.** One check at a time. Wait for it to finish fully before starting the next - each check edits files the next one reads. If your tool supports subagents, delegate each skill to one, but spawn only one subagent at a time and wait for its result (never background it, never launch two in the same turn).
 
-**Steps 8-10 run in parallel** once steps 1-7 are all done. They are read-only audits, so they cannot conflict. Launch all three subagents in the same turn and wait for all of them before step 11.
+Each check fixes what it is confident about and returns a numbered "needs your go-ahead" list instead of stopping to ask. Collect those lists. Do not ask the user anything until the final report (except `prune-branches`).
 
 **Models:** every check subagent (steps 1-10) uses `model: sonnet`, except `architecture-review`, which uses `model: opus` - it reasons across the whole codebase and runs rarely.
 
@@ -34,12 +34,12 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 5. `clean-comments`
 6. `detect-duplication` - look for duplication across all files in scope, not just within one file
 7. `review-file-size`
-8. `deslop` - report only, no fixes.
-9. `architecture-review` - report only, no fixes. Runs on the cleaned-up code.
-10. `db-audit` - report only, no fixes.
+8. `deslop`
+9. `architecture-review` - runs on the cleaned-up code.
+10. `db-audit`
 11. `prune-branches` - repo-wide, ignores file scope. Runs last because it waits for user confirmation before deleting.
 
-Steps 8-10 cover the whole codebase by default. If the user named a scope, tell them to limit the review to those paths.
+Steps 8-10 cover the whole codebase by default. If the user named a scope, tell them to limit the work to those paths.
 
 ## After changes
 
@@ -48,11 +48,16 @@ Steps 8-10 cover the whole codebase by default. If the user named a scope, tell 
 
 ## Report
 
-Terse. One line per item, grouped by file. No prose, no praise.
+Terse. No prose, no praise.
 
 ```
-file:line - changed: what. why.
-file:line - skipped: what. why.
+## Changed
+file:line - what. why.
+
+## Needs your go-ahead
+1. file:line - problem. why not done. what you need from the user.
 ```
 
-Put the `sync-template-rules` report first. Then append the `deslop` audit and manual browser checklist, and the `architecture-review`, `db-audit` and `prune-branches` reports as-is, each under its own heading.
+Put the `sync-template-rules` report first. Then one `Changed` section grouped by check. Then the deslop manual browser checklist and the `prune-branches` result.
+
+End with one merged `Needs your go-ahead` list from all checks, numbered across the whole run so the user can answer by number. Drop duplicates. This list is the last thing in the reply.
