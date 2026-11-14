@@ -62,6 +62,6 @@ file:line - what. why.
 1. file:line - problem. why not done. what you need from the user.
 ```
 
-Put the `sync-template-rules` report first. Then one `Changed` section grouped by check. Then the deslop manual browser checklist and the `prune-branches` result.
+Put the `sync-template-rules` report first. Then one `Changed` section grouped by check. Then the deslop and `extract-ui-primitives` manual browser checklists and the `prune-branches` result.
 
 End with one merged `Needs your go-ahead` list from all checks, numbered across the whole run so the user can answer by number. Drop duplicates. This list is the last thing in the reply.
