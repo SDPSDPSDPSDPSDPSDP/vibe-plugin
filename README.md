@@ -18,9 +18,10 @@ Projects from the template enable it through `.claude/settings.json`. Elsewhere:
 | | |
 |---|---|
 | `/new-project` | Scaffold a project from the template: ask, prune, fill in, verify |
-| `/branch-cleanup`, `/codebase-cleanup` | Project rules, simplify, readability, comments, dedupe, file size |
+| `/branch-cleanup`, `/codebase-cleanup` | Project rules, simplify, readability, comments, UI primitives, dedupe, file size |
 | `/sync-template-rules` | Pull newer rules and docs from the template into a project |
 | `/deslop`, `/architecture-review`, `/db-audit` | Audits: fix what is safe, list what needs your go-ahead |
 | `/agent-ready` | Research current agentic coding best practice online, then improve the codebase for it |
+| `/extract-ui-primitives` | Move every generic UI piece into its own primitive component, even if used once |
 | `/prune-branches` | Delete local branches whose remote is gone |
 | Stop hook | `tsc --noEmit` (TypeScript) / `ruff` + `mypy` (Python) on changed projects |
