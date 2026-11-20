@@ -47,8 +47,19 @@ Steps 9-14 cover the whole codebase by default. If the user named a scope, tell 
 
 ## After changes
 
-1. Run typecheck/lint for the project (see project's own docs/AGENTS.md for exact commands).
-2. Report what changed and what was skipped.
+1. Triage the open items (below).
+2. Run typecheck/lint for the project (see project's own docs/AGENTS.md for exact commands).
+3. Report what changed and what was skipped.
+
+## Triage open items
+
+The collected "needs your go-ahead" lists are usually long, and checks over-ask. Before reporting, take a critical look and go through every item, one by one, in the main thread:
+
+- Drop it if it is wrong, already fixed by a later check, a duplicate, or not worth doing.
+- Do it yourself if it does not truly need the user: the fix is clear, local, reversible and matches the project's rules and existing patterns. Re-run the affected check's verification after.
+- Keep it only if it truly needs the user: a product or design decision, a behavior change users would notice, a public API or schema change, deleting data or files the user may want, cost, credentials, or real ambiguity about intent.
+
+Only kept items go in the final `Needs your go-ahead` list. Add each fix you made to `Changed` under a `Triage` heading, and list dropped items in one line each under `Dropped` with the reason.
 
 ## Report
 
@@ -64,4 +75,4 @@ file:line - what. why.
 
 Put the `sync-template-rules` report first. Then one `Changed` section grouped by check. Then the deslop and `extract-ui-primitives` manual browser checklists and the `prune-branches` result.
 
-End with one merged `Needs your go-ahead` list from all checks, numbered across the whole run so the user can answer by number. Drop duplicates. This list is the last thing in the reply.
+Then the `Dropped` items from triage. End with one merged `Needs your go-ahead` list of the items triage kept, numbered across the whole run so the user can answer by number. Drop duplicates. This list is the last thing in the reply.
