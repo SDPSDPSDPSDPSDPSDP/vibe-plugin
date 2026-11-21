@@ -1,6 +1,6 @@
 ---
 name: sync-template-rules
-description: Update the current repo's rule and docs markdown (AGENTS.md, CLAUDE.md, docs/**, module READMEs) and the tooling that enforces those hard rules (pre-commit hooks, ruff/mypy/pytest config, rule tests, ESLint/Stylelint/husky, Claude deny list, CI gates) to match the latest version in Shirin's data science template repo. Keeps project-specific additions. Use when the user says "sync template rules", "update rules from template", "is this repo up to date with the template", or /sync-template-rules. Also run by codebase-cleanup.
+description: Update the current repo's rule and docs markdown (AGENTS.md, CLAUDE.md, docs/**, module READMEs) and the tooling that enforces those hard rules (pre-commit hooks, ruff/mypy/pytest config, rule tests, ESLint/Stylelint/husky, Claude deny list, CI gates) to match the latest version in Shirin's data science template repo. Keeps project-specific additions. Use when the user says "sync template rules", "update rules from template", "is this repo up to date with the template", or /sync-template-rules. Also run by branch-cleanup and codebase-cleanup.
 ---
 
 # Sync Template Rules

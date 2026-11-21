@@ -18,7 +18,7 @@ Projects from the template enable it through `.claude/settings.json`. Elsewhere:
 | | |
 |---|---|
 | `/new-project` | Scaffold a project from the template: ask, prune, fill in, verify |
-| `/branch-cleanup` | Project rules, simplify, readability, dedupe, architecture review on the branch diff |
+| `/branch-cleanup` | Template rule sync, project rules, simplify, readability, dedupe, architecture review on the branch diff |
 | `/codebase-cleanup` | Same on every file, plus comment cleanup, UI primitives and all audits |
 | `/sync-template-rules` | Pull newer rules and docs from the template into a project |
 | `/deslop`, `/architecture-review`, `/db-audit` | Audits: fix what is safe, list what needs your go-ahead |

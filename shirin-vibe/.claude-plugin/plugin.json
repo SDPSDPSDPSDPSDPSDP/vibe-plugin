@@ -1,7 +1,7 @@
 {
   "name": "shirin-vibe",
   "displayName": "Shirin's Vibe",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Branch cleanup (project rules, simplify, readability, dedupe), codebase cleanup (adds comment cleanup, UI primitive extraction), deslop, architecture review, DB, security and performance audits, gone-branch pruning, /new-project scaffolding, plus TypeScript and Python check hook.",
   "author": { "name": "SDPSDPSDPSDPSDPSDP" }
 }
