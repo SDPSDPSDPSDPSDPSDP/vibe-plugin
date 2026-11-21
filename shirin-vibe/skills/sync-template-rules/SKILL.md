@@ -11,13 +11,13 @@ Template: `https://github.com/SDPSDPSDPSDPSDPSDP/data-science-template.git` (pri
 
 ## 1. Get the template
 
-Shallow clone into a temp dir outside the repo. Delete it when done.
+Local checkout first: find it via the `my-projects` MCP (`find_project` `data-science-template`, `local_dirs`), usually `~/Code/Common/Data Science Template`. Use its committed `HEAD`, never its uncommitted changes:
 
 ```
-git clone --depth 1 <template-url> <tmp>/template
+git -C <checkout> archive HEAD | tar -x -C <tmp>/template
 ```
 
-Clone fails: report and stop.
+No local checkout: shallow clone into a temp dir outside the repo (`git clone --depth 1 <template-url> <tmp>/template`). Delete the temp copy when done. Both fail: report and stop.
 
 ## 2. Pick files
 
@@ -49,7 +49,9 @@ Edit in place. Keep the repo file's structure where the template's matches; othe
 Template hard rules name their enforcer (pre-commit hook id, test file, ruff ban, Stylelint rule, deny entry, CI step). For each hard rule the repo now has, check its enforcer exists in the repo and matches the template.
 
 Modules the repo has (only these count):
-- `api`: `api/` exists. `ml`: `shared/` exists.
+Detect by what the repo holds, never by folder name: a module applies to whatever folder holds its code.
+- `api` (Python): root `pyproject.toml` exists. Template `api/` maps to the repo's Python source dirs (`[tool.setuptools.packages]`, `[tool.hatch...] packages`, or top-level dirs with `.py` files). Use them wherever the template names `api` (`SOURCE_DIRS`, mypy `files`, `--cov`, ruff `per-file-ignores`). API-only rules (FastAPI, `get_settings()` / `tests/test_settings.py`, `os.getenv` ban pointing at settings) apply only when the repo has that layer; else skip and report.
+- `ml`: `shared/` or a `train`/`ml` extra exists.
 - `web`: `web/` exists, or Next.js app at repo root (root `package.json` depends on `next`). Web at root: every template `web/<path>` maps to repo `<path>`, in enforcer files, AGENTS.md paths (`web/src/...` -> `src/...`) and commands (no `cd web`, no `working-directory: web`). Never create a `web/` folder.
 - `personal`: `.github/workflows/ci.yml` or `database/schema.sql`. `work`: `.gitlab-ci.yml`.
 
