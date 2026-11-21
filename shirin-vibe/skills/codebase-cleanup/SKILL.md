@@ -27,7 +27,7 @@ Each check fixes what it is confident about and returns a numbered "needs your g
 
 **Models:** every check subagent (steps 1-14) uses `model: sonnet`, except `architecture-review` and the security audit, which use `model: opus` - they reason across the whole codebase and run rarely.
 
-1. `sync-template-rules` - repo-wide, ignores file scope. Runs first so later checks enforce the latest rules.
+1. `sync-template-rules` - repo-wide, ignores file scope. Syncs rules plus their enforcers (hooks, lint, rule tests, CI). Runs first so later checks enforce the latest rules.
 2. `project-rules`
 3. `simplify-code`
 4. `readability`

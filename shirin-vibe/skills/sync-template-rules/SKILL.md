@@ -1,11 +1,11 @@
 ---
 name: sync-template-rules
-description: Update the current repo's rule and docs markdown (AGENTS.md, CLAUDE.md, docs/**, module READMEs) to match the latest version in Shirin's data science template repo. Keeps project-specific additions. Use when the user says "sync template rules", "update rules from template", "is this repo up to date with the template", or /sync-template-rules. Also run by codebase-cleanup.
+description: Update the current repo's rule and docs markdown (AGENTS.md, CLAUDE.md, docs/**, module READMEs) and the tooling that enforces those hard rules (pre-commit hooks, ruff/mypy/pytest config, rule tests, ESLint/Stylelint/husky, Claude deny list, CI gates) to match the latest version in Shirin's data science template repo. Keeps project-specific additions. Use when the user says "sync template rules", "update rules from template", "is this repo up to date with the template", or /sync-template-rules. Also run by codebase-cleanup.
 ---
 
 # Sync Template Rules
 
-Projects are scaffolded from the template (`/new-project`), then the template keeps evolving. This skill pulls the template's newer rules into the current repo.
+Projects are scaffolded from the template (`/new-project`), then the template keeps evolving. This skill pulls the template's newer rules into the current repo, plus the tooling that enforces them. A hard rule without its enforcer is only half synced.
 
 Template: `https://github.com/SDPSDPSDPSDPSDPSDP/data-science-template.git` (private; git credentials from this machine).
 
@@ -43,7 +43,41 @@ Per file pair:
 
 Edit in place. Keep the repo file's structure where the template's matches; otherwise follow the template's structure.
 
-## 4. Report
+## 4. Enforcers
+
+Template hard rules name their enforcer (pre-commit hook id, test file, ruff ban, Stylelint rule, deny entry, CI step). For each hard rule the repo now has, check its enforcer exists in the repo and matches the template.
+
+Modules the repo has (only these count):
+- `api`: `api/` exists. `ml`: `shared/` exists. `web`: `web/` exists.
+- `personal`: `.github/workflows/ci.yml` or `database/schema.sql`. `work`: `.gitlab-ci.yml`.
+
+Enforcer files, per module:
+
+| Module | Files |
+|---|---|
+| core | `.claude/settings.json` (`permissions.deny`), `.gitattributes` |
+| `api` | `.pre-commit-config.yaml`, `pyproject.toml` (`[tool.ruff*]`, `[tool.mypy*]`, `[tool.pytest*]`, `[tool.coverage*]`, `[dependency-groups] dev`), `tests/test_text_chars.py`, `tests/test_file_size.py`, `tests/test_settings.py`, `tests/conftest.py` |
+| `web` | `web/eslint.config.mjs`, `web/stylelint.config.mjs`, `web/.prettierignore`, `web/vitest.config.mts`, `web/.husky/pre-commit`, `web/package.json` (`scripts` lint/typecheck/test/format/prepare, `lint-staged`, lint/test `devDependencies`) |
+| `personal` | `.github/workflows/ci.yml` (gate steps) |
+| `work` | `pipeline/ci/python.yml`, `pipeline/ci/web.yml` (gate jobs) |
+
+Template files hold module marker blocks (`# >>> module: <name>` ... `# <<< module: <name>`, `//` in JS/TS). Before comparing: drop blocks of modules the repo lacks, keep lines of modules it has, strip marker lines. Never copy markers into the repo.
+
+Merge per file:
+- Hook, lint rule, ban, deny entry, script, CI gate step in template, missing or older in repo -> add/update to template.
+- Removed in template, still in repo, clearly template-origin -> remove.
+- Project additions (extra hooks, bans, per-file-ignores, deny entries, CI steps, runtime deps) -> keep.
+- Never touch `[project]` runtime dependencies, app code, or filled placeholders.
+- Rule test file missing (`test_text_chars.py`, `test_file_size.py`, ...) -> copy from template. `SOURCE_DIRS`-style lists: keep only dirs the repo has.
+- Never relax a repo limit that is stricter than the template.
+
+Then wire it up:
+- Dev tools added: `uv lock` (api), `npm install` in `web/` (web).
+- Git hook installed? With `web`: `git config core.hooksPath` is `web/.husky`; else `api`: `.git/hooks/pre-commit` exists. Missing -> run `npm install` in `web/` (husky `prepare`) or `uv run pre-commit install`.
+- Run the checks AGENTS.md lists (`api`: `uv run ruff format .`, `uv run ruff check .`, `uv run mypy`, `uv run pytest`, `uv run pre-commit run --all-files`; `web`: `npm run lint`, `npm run typecheck`, `npm test`). Never `next build`.
+- Autofix only (`ruff format`, `ruff check --fix`, `prettier --write`, `eslint --fix`, `stylelint --fix`). Remaining violations: list, do not hand-fix here (`project-rules` and later checks handle them). Never silence with `# noqa`, `eslint-disable`, `--no-verify`, or by loosening the new config.
+
+## 5. Report
 
 Terse. One line per item. No prose.
 
@@ -51,6 +85,9 @@ Terse. One line per item. No prose.
 file - updated: what rule. from template.
 file - added: new file from template.
 file - skipped: what. why.
+enforcer - added/updated: rule -> hook/test/ban/CI step. file.
+hook - installed: pre-commit / husky.
+violation - check: file:line count. rule.
 ```
 
-Nothing differs: `Rules up to date with template.`
+Nothing differs: `Rules and enforcers up to date with template.`
