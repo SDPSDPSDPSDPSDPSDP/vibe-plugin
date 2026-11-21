@@ -1,6 +1,6 @@
 ---
 name: clean-comments
-description: Strip or collapse stale/obvious comments in the current branch's changed files. Mechanical, no design judgment. Use when the user says "clean comments" or /clean-comments. Also run by codebase-cleanup.
+description: Strip or collapse stale/obvious comments in a given file list (defaults to the current branch's changed files). Mechanical, no design judgment. Use when the user says "clean comments" or /clean-comments. Also run by codebase-cleanup (not branch-cleanup).
 model: sonnet
 ---
 
