@@ -1,6 +1,6 @@
 ---
 name: branch-cleanup
-description: Clean up the current branch's changed files before merge - enforce project rules, simplify, readability, dedupe, then review the architecture of the touched files and the feature they add. Use when the user says "clean this branch", "branch cleanup", or /branch-cleanup.
+description: Clean up the current branch's changed files before merge - sync rules from the template, enforce project rules, simplify, readability, dedupe, then review the architecture of the touched files and the feature they add. Use when the user says "clean this branch", "branch cleanup", or /branch-cleanup.
 ---
 
 # Branch Cleanup
@@ -23,11 +23,12 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 
 **Strictly sequential. Never run checks in parallel.** One check at a time. Wait for it to finish fully before starting the next - each check edits files the next one reads. If your tool supports subagents, delegate each skill to one with `model: sonnet` (`architecture-review` uses `model: opus`) - keeps each check's file-reading out of your own context - but spawn only one subagent at a time and wait for its result (never background it, never launch two in the same turn).
 
-1. `project-rules`
-2. `simplify-code`
-3. `readability`
-4. `detect-duplication`
-5. `architecture-review` - branch mode, runs on the cleaned-up code. Fixes what it is confident about, returns a numbered "needs your go-ahead" list. Do not ask the user until the final report.
+1. `sync-template-rules` - repo-wide, ignores file scope. Runs first so later checks enforce the latest rules.
+2. `project-rules`
+3. `simplify-code`
+4. `readability`
+5. `detect-duplication`
+6. `architecture-review` - branch mode, runs on the cleaned-up code. Fixes what it is confident about, returns a numbered "needs your go-ahead" list. Do not ask the user until the final report.
 
 ## After changes
 
@@ -47,4 +48,4 @@ file:line - skipped: what. why.
 1. file:line - problem. why not done. what you need from the user.
 ```
 
-End with the `architecture-review` go-ahead list, numbered so the user can answer by number. Omit the section if empty.
+Put the `sync-template-rules` report first. End with the `architecture-review` go-ahead list, numbered so the user can answer by number. Omit the section if empty.
