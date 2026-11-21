@@ -1,6 +1,6 @@
 ---
 name: branch-cleanup
-description: Clean up the current branch's changed files before merge - enforce project rules, simplify, readability, dedupe, audit file size, then review the architecture of the touched files and the feature they add. Use when the user says "clean this branch", "branch cleanup", or /branch-cleanup.
+description: Clean up the current branch's changed files before merge - enforce project rules, simplify, readability, dedupe, then review the architecture of the touched files and the feature they add. Use when the user says "clean this branch", "branch cleanup", or /branch-cleanup.
 ---
 
 # Branch Cleanup
@@ -27,8 +27,7 @@ Run each skill in order, passing it the in-scope file list. Apply only justified
 2. `simplify-code`
 3. `readability`
 4. `detect-duplication`
-5. `review-file-size`
-6. `architecture-review` - branch mode, runs on the cleaned-up code. Fixes what it is confident about, returns a numbered "needs your go-ahead" list. Do not ask the user until the final report.
+5. `architecture-review` - branch mode, runs on the cleaned-up code. Fixes what it is confident about, returns a numbered "needs your go-ahead" list. Do not ask the user until the final report.
 
 ## After changes
 
